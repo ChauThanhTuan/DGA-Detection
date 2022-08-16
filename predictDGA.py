@@ -4,6 +4,8 @@ Main prediction module for dgaintel package
 import os
 import numpy as np
 from tensorflow.keras.models import load_model
+from datetime import datetime
+from elasticsearch import Elasticsearch
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
@@ -17,20 +19,40 @@ CHAR2IDX = {'-': 0, '.': 1, '0': 2, '1': 3, '2': 4, '3': 5,
             'r': 30, 's': 31, 't': 32, 'u': 33, 'v': 34, 'w': 35,
             'x': 36, 'y': 37, 'z': 38}
 
+count=0
+
 def _inputs(domains):
     if isinstance(domains, list):
         return [domain.lower() for domain in domains]
 
     return [domains.lower()]
 
-def _get_prediction(domain_name, prob=None):
+def _get_prediction(domain_name, ip, port, prob=None):
+    global count
+    es = Elasticsearch(f"http://{ip}:{port}/")
     if not prob:
         prob = get_prob([domain_name], raw=True)
 
     if prob >= 0.5:
-        return '{} is DGA with probability {}\n'.format(domain_name, prob)
+        count = count+1
+        doc = {
+            'author': 'QuynhQuynh',
+            'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
+            'timestamp': datetime.now(),
+        }
+        #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
+        res = es.index(index="test-index", id=count, document=doc)
+        return '{} is DGA with probability {:f}\n'.format(domain_name, prob)
 
-    return '{} is genuine with probability {}\n'.format(domain_name, prob)
+    count = count+1
+    doc = {
+            'author': 'QuynhQuynh',
+            'text': 'Elasticsearch predict DGA domain: {} is genuine with probability {:f}\n'.format(domain_name, prob),
+            'timestamp': datetime.now(),
+    }
+    #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
+    res = es.index(index="test-index", id=count, document=doc)
+    return '{} is genuine with probability {:f}\n'.format(domain_name, prob)
 
 def get_prob(domains, raw=False, internal=False):
     '''
@@ -62,7 +84,7 @@ def get_prob(domains, raw=False, internal=False):
 
     return list(zip(domains, list(prob)))
 
-def get_prediction(domains, to_file=None, show=True):
+def get_prediction(domains, ip, port, to_file=None, show=True):
     '''
     Wrapper for printing out/writing full predictions on a domain or set of domains
     Input: domain (str), list of domains (list), domains in .txt file (FileObj)
@@ -71,7 +93,7 @@ def get_prediction(domains, to_file=None, show=True):
         to_file=<filename>.txt: writes new file at <filename>.txt with predictions
     '''
     raw_probs = get_prob(_inputs(domains), internal=True)
-    preds = [_get_prediction(domain, prob=prob) for domain, prob in raw_probs]
+    preds = [_get_prediction(domain, ip, port, prob=prob) for domain, prob in raw_probs]
 
     if to_file:
         assert os.path.splitext(to_file)[1] == ".txt"
@@ -98,7 +120,7 @@ def main():
                     'foilfencersarebad.com',
                     'discojjfdsf.com',
                     'fasddafhkj.com',
-                    'wikipedai.com'])
+                    'wikipedai.com'], "192.168.222.128", "9200")
 
 if __name__ == '__main__':
     main()

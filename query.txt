@@ -1,0 +1,1 @@
+http://172.16.60.10:9200/logstash-dns-2022.07.26/_search?pretty&&size=1&&from=2

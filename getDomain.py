@@ -14,7 +14,7 @@ def start(url):
 def getDomains(url, id):
     domains = []
     responses = requests.get(url).json()
-    
+
     for response in responses["hits"]["hits"]:
         # strTime = response["_source"]["timestamp"].split("T")[1].split(".")[0]
         # time_obj = datetime.datetime.strptime(strTime, '%H:%M:%S').time()
@@ -27,10 +27,9 @@ def getDomains(url, id):
         # print(datetime.datetime.combine(datetime.datetime.min, time_obj) - datetime.datetime.combine(datetime.datetime.min, current_time))
         if response == id:
             break
-        
+
         domains.append(response["_source"]["dns"]["rrname"])
 
     id = responses["hits"]["hits"][0]["_id"]
-    
-    return (id, domains)
 
+    return (id, domains)

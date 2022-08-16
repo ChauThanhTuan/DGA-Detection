@@ -9,15 +9,18 @@ RUN pip install numpy
 RUN pip install tensorflow
 RUN pip install flask
 RUN pip install flask_restful
+RUN pip install elasticsearch
 
 RUN mkdir PredictDGA
 COPY trained_model_5_3_2.h5 PredictDGA/trained_model_5_3_2.h5
-COPY API.py PredictDGA/API.py
-COPY predict.py PredictDGA/predict.py
+COPY selks_dga.py PredictDGA/selks_dga.py
+COPY predictDGA.py PredictDGA/predictDGA.py
+COPY config.py PredictDGA/config.py
+COPY getDomain.py PredictDGA/getDomain.py
 
 WORKDIR PredictDGA
-RUN chmod +x API.py
+RUN chmod +x selks_dga.py
 
-CMD ["./API.py"]
+CMD ["./selks_dga.py"]
 
 EXPOSE 5000
