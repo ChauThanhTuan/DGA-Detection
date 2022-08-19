@@ -4,8 +4,11 @@ Main prediction module for dgaintel package
 import os
 import numpy as np
 from tensorflow.keras.models import load_model
-from datetime import datetime
+from datetime import datetime, timedelta
 from elasticsearch import Elasticsearch
+import shlex
+import subprocess
+
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
@@ -27,9 +30,9 @@ def _inputs(domains):
 
     return [domains.lower()]
 
-def _get_prediction(domain_name, ip, port, prob=None):
+def _get_prediction(domain_name, prob=None):
     global count
-    es = Elasticsearch(f"http://{ip}:{port}/")
+    es = Elasticsearch("http://172.16.60.10:9200/")
     if not prob:
         prob = get_prob([domain_name], raw=True)
 
@@ -38,17 +41,23 @@ def _get_prediction(domain_name, ip, port, prob=None):
         doc = {
             'author': 'QuynhQuynh',
             'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
-            'timestamp': datetime.now(),
+            'timestamp': datetime.now() + timedelta(hours=7),
         }
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="test-index", id=count, document=doc)
+        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://172.16.60.10:9000/api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
+        args = shlex.split(cmd)
+        process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+
+
         return '{} is DGA with probability {:f}\n'.format(domain_name, prob)
 
     count = count+1
     doc = {
             'author': 'QuynhQuynh',
             'text': 'Elasticsearch predict DGA domain: {} is genuine with probability {:f}\n'.format(domain_name, prob),
-            'timestamp': datetime.now(),
+            'timestamp': datetime.now() + timedelta(hours=7),
     }
     #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
     res = es.index(index="test-index", id=count, document=doc)
@@ -84,7 +93,7 @@ def get_prob(domains, raw=False, internal=False):
 
     return list(zip(domains, list(prob)))
 
-def get_prediction(domains, ip, port, to_file=None, show=True):
+def get_prediction(domains, to_file=None, show=True):
     '''
     Wrapper for printing out/writing full predictions on a domain or set of domains
     Input: domain (str), list of domains (list), domains in .txt file (FileObj)
@@ -93,7 +102,7 @@ def get_prediction(domains, ip, port, to_file=None, show=True):
         to_file=<filename>.txt: writes new file at <filename>.txt with predictions
     '''
     raw_probs = get_prob(_inputs(domains), internal=True)
-    preds = [_get_prediction(domain, ip, port, prob=prob) for domain, prob in raw_probs]
+    preds = [_get_prediction(domain, prob=prob) for domain, prob in raw_probs]
 
     if to_file:
         assert os.path.splitext(to_file)[1] == ".txt"
@@ -120,7 +129,7 @@ def main():
                     'foilfencersarebad.com',
                     'discojjfdsf.com',
                     'fasddafhkj.com',
-                    'wikipedai.com'], "192.168.222.128", "9200")
+                    'wikipedai.com'])
 
 if __name__ == '__main__':
     main()
