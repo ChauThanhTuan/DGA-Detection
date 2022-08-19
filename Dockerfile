@@ -22,5 +22,3 @@ WORKDIR PredictDGA
 RUN chmod +x selks_dga.py
 
 CMD ["./selks_dga.py"]
-
-EXPOSE 5000
