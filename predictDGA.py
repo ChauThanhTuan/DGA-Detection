@@ -2,6 +2,8 @@
 Main prediction module for dgaintel package
 '''
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 import numpy as np
 from tensorflow.keras.models import load_model
 from datetime import datetime, timedelta
@@ -9,6 +11,7 @@ from elasticsearch import Elasticsearch
 import shlex
 import subprocess
 
+import config
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
@@ -32,7 +35,7 @@ def _inputs(domains):
 
 def _get_prediction(domain_name, prob=None):
     global count
-    es = Elasticsearch("http://172.16.60.10:9200/")
+    es = Elasticsearch(f"http://{config.SELKS_IP}:{config.SELKS_PORT}/")
     if not prob:
         prob = get_prob([domain_name], raw=True)
 
@@ -45,7 +48,7 @@ def _get_prediction(domain_name, prob=None):
         }
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="test-index", id=count, document=doc)
-        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://172.16.60.10:9000/api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
+        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
         args = shlex.split(cmd)
         process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -132,4 +135,6 @@ def main():
                     'wikipedai.com'])
 
 if __name__ == '__main__':
+    print(f"http://{config.SELKS_IP}:{config.SELKS_PORT}/")
+    print(f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\'')
     main()

@@ -2,3 +2,4 @@ numpy
 tensorflow
 flask
 flask_restful
+elasticsearch

@@ -2,6 +2,8 @@
 Main prediction module for dgaintel package
 '''
 import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 import numpy as np
 from tensorflow.keras.models import load_model
 
@@ -86,14 +88,9 @@ def main():
     '''
     Main function for testing purposes.
     '''
-    get_prediction(['microsoft.com',
-                    'squarespace.com',
-                    'hsfkjdshfjasdhfk.com',
-                    'fdkhakshfda.com',
-                    'foilfencersarebad.com',
-                    'discojjfdsf.com',
-                    'fasddafhkj.com',
-                    'wikipedai.com'])
+    prob, pred = get_prediction('wikipedai.com')
+    print("\nPrediction:")
+    print(pred)
 
 if __name__ == '__main__':
     main()

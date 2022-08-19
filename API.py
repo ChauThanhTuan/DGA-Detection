@@ -3,7 +3,7 @@
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
 
-from predict import get_prediction
+from predictDGA_API import get_prediction
 
 # creating the flask app
 app = Flask(__name__)
@@ -21,4 +21,5 @@ api.add_resource(API, "/<domain>")
 
 # driver function
 if __name__ == "__main__":
+	print("Usage: curl http://192.168.222.128:5000/<domain_name>")
 	app.run(host="0.0.0.0", debug = True)
