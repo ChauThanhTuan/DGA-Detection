@@ -11,8 +11,6 @@ from elasticsearch import Elasticsearch
 import shlex
 import subprocess
 
-import config
-
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
 
@@ -33,9 +31,9 @@ def _inputs(domains):
 
     return [domains.lower()]
 
-def _get_prediction(domain_name, prob=None):
+def _get_prediction(domain_name, ip, port, prob=None):
     global count
-    es = Elasticsearch(f"http://{config.SELKS_IP}:{config.SELKS_PORT}/")
+    es = Elasticsearch(f"http://{ip}:{port}/")
     if not prob:
         prob = get_prob([domain_name], raw=True)
 
@@ -48,7 +46,7 @@ def _get_prediction(domain_name, prob=None):
         }
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="test-index", id=count, document=doc)
-        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
+        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{ip}:{port}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
         args = shlex.split(cmd)
         process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
@@ -96,7 +94,7 @@ def get_prob(domains, raw=False, internal=False):
 
     return list(zip(domains, list(prob)))
 
-def get_prediction(domains, to_file=None, show=True):
+def get_prediction(domains, ip, port, to_file=None, show=True):
     '''
     Wrapper for printing out/writing full predictions on a domain or set of domains
     Input: domain (str), list of domains (list), domains in .txt file (FileObj)
@@ -105,7 +103,7 @@ def get_prediction(domains, to_file=None, show=True):
         to_file=<filename>.txt: writes new file at <filename>.txt with predictions
     '''
     raw_probs = get_prob(_inputs(domains), internal=True)
-    preds = [_get_prediction(domain, prob=prob) for domain, prob in raw_probs]
+    preds = [_get_prediction(domain, ip, port, prob=prob) for domain, prob in raw_probs]
 
     if to_file:
         assert os.path.splitext(to_file)[1] == ".txt"
@@ -132,9 +130,7 @@ def main():
                     'foilfencersarebad.com',
                     'discojjfdsf.com',
                     'fasddafhkj.com',
-                    'wikipedai.com'])
+                    'wikipedai.com'], "192.168.222.128", "9200")
 
 if __name__ == '__main__':
-    print(f"http://{config.SELKS_IP}:{config.SELKS_PORT}/")
-    print(f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\'')
     main()
