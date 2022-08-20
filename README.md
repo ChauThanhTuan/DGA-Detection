@@ -23,8 +23,8 @@ Install process
 ### Basic installation
 
 ```bash
-git clone https://github.com/StamusNetworks/SELKS.git
-cd SELKS/docker/
+git clone https://github.com/Tuan164/SELKS_DGA.git
+cd SELKS_DGA/SELKS/docker/
 ./easy-setup.sh
 docker-compose up -d
 ```
