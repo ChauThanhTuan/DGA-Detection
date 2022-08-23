@@ -42,7 +42,7 @@ def _get_prediction(domain_name, prob=None):
     if prob >= 0.5:
         count = count+1
         doc = {
-            'author': 'QuynhQuynh',
+            'author': 'TuanQuynh',
             'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
         }
@@ -59,7 +59,7 @@ def _get_prediction(domain_name, prob=None):
 
     count = count+1
     doc = {
-            'author': 'QuynhQuynh',
+            'author': 'TuanQuynh',
             'text': 'Elasticsearch predict DGA domain: {} is genuine with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
     }
