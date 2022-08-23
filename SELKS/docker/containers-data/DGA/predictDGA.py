@@ -46,8 +46,9 @@ def _get_prediction(domain_name, prob=None):
             'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
         }
+        es.indices.create(index="classifyDomains", ignore=400)
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
-        res = es.index(index="test-index", id=count, document=doc)
+        res = es.index(index="classifyDomains", id=count, document=doc)
         cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer 4aR8NTB193w54OWYHC7IWZANL13SyjUt\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
         args = shlex.split(cmd)
         process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -63,7 +64,7 @@ def _get_prediction(domain_name, prob=None):
             'timestamp': datetime.now() + timedelta(hours=7),
     }
     #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
-    res = es.index(index="test-index", id=count, document=doc)
+    res = es.index(index="classifyDomains", id=count, document=doc)
     return '{} is genuine with probability {:f}\n'.format(domain_name, prob)
 
 def get_prob(domains, raw=False, internal=False):
