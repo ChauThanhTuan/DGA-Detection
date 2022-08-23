@@ -37,7 +37,7 @@ def main():
         url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search'
         id, domains = start(url)
 
-    get_prediction(domains, ip=config.SELKS_IP, port=config.SELKS_PORT, show=True)
+    get_prediction(domains, show=True)
 
 if __name__ == "__main__":
     setInterval(main, config.INTERVAL)
