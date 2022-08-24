@@ -61,7 +61,7 @@ services:
       - 9300:9300
     volumes:
       - ${ELASTIC_DATAPATH:-elastic-data}:/usr/share/elasticsearch/data
-    mem_limit: ${ELASTIC_MEMORY:-3G}
+    mem_limit: ${ELASTIC_MEMORY:-1G}
     ulimits:
       memlock:
         soft: -1
