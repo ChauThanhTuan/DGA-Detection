@@ -4,6 +4,7 @@ RUN apt update
 
 RUN apt install -y python3
 RUN apt install -y pip
+RUN apt install -y curl
 
 RUN pip install numpy
 RUN pip install tensorflow
@@ -17,10 +18,10 @@ COPY selks_dga.py PredictDGA/selks_dga.py
 COPY predictDGA.py PredictDGA/predictDGA.py
 COPY config.py PredictDGA/config.py
 COPY getDomain.py PredictDGA/getDomain.py
+COPY entrypoint.sh PredictDGA/entrypoint.sh
 
 WORKDIR PredictDGA
 RUN chmod +x selks_dga.py
+RUN chmod +x entrypoint.sh
 
-CMD ["./selks_dga.py"]
-
-EXPOSE 5000
+CMD ["./entrypoint.sh"]
