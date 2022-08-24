@@ -972,7 +972,6 @@ if [[ "${_arg_pull_containers}" == "on" ]]; then
 
 fi
 
-
 ######################
 # Starting           #
 ######################
