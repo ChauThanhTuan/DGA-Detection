@@ -1,3 +1,21 @@
+# Copyright(C) 2021, Stamus Networks
+# Written by Raphaël Brogat <rbrogat@stamus-networks.com>
+#
+# This file comes with ABSOLUTELY NO WARRANTY!
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 version: '3.4'
 
 networks:
@@ -38,6 +56,9 @@ services:
       - xpack.security.enabled=false
       - xpack.ml.enabled=${ML_ENABLED:-true}
       - ingest.geoip.downloader.enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
     volumes:
       - ${ELASTIC_DATAPATH:-elastic-data}:/usr/share/elasticsearch/data
     mem_limit: ${ELASTIC_MEMORY:-3G}
@@ -58,6 +79,8 @@ services:
       timeout: 5s
       retries: 3
       start_period: 30s
+    ports:
+      - 5601:5601
     networks:
       network:
     
@@ -75,6 +98,9 @@ services:
       retries: 3
       start_period: 30s
     mem_limit: ${LOGSTASH_MEMORY:-2G}
+    ports:
+      - 5044:5044
+      - 9600:9600
     volumes:
       - logstash-sincedb:/since.db
       - ./containers-data/suricata/logs:/var/log/suricata:ro
@@ -125,7 +151,8 @@ services:
       - USE_SURICATA_STATS=True #display more informations on the suricata page
       - USE_MOLOCH=True
       - MOLOCH_URL=http://arkime:8005
-      
+    ports:
+      - 8000:8000      
     volumes:
       - scirius-static:/static/
       - scirius-data:/data/
@@ -155,6 +182,7 @@ services:
       - ./containers-data/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./containers-data/nginx/ssl:/etc/nginx/ssl:ro
     ports:
+      - 80:80
       - 443:443
     networks:
       network:
@@ -187,6 +215,8 @@ services:
       - arkime-config:/data/config
       - arkime-pcap:/data/pcap
       - arkime-logs:/data/logs
+    ports:
+      - 8005:8005
     networks:
       network:
 
@@ -216,3 +246,4 @@ services:
       - ./containers-data/DGA:/PredictDGA
     networks:
       network:
+
