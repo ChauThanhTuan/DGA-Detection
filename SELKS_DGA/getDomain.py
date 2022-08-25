@@ -25,7 +25,7 @@ def getDomains(url, id):
         # print("!!!\n", current_time)
         # print(time_obj)
         # print(datetime.datetime.combine(datetime.datetime.min, time_obj) - datetime.datetime.combine(datetime.datetime.min, current_time))
-        if response == id:
+        if response["_id"] == id:
             break
 
         domains.append(response["_source"]["dns"]["rrname"])
