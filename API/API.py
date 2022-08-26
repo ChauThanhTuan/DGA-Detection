@@ -21,5 +21,5 @@ api.add_resource(API, "/<domain>")
 
 # driver function
 if __name__ == "__main__":
-	print("Usage: curl http://192.168.222.128:5000/<domain_name>")
+	print("Usage: curl http://<Server_IP>:5000/<domain_name>")
 	app.run(host="0.0.0.0", debug = True)
