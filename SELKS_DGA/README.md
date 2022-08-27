@@ -11,3 +11,8 @@ và kiểm tra id tuần tự từng log. Nếu id trùng với id của log cu�
 Các domains trích xuất được sẽ được phân loại và gửi trả kết quả lên elasticsearch_index `classifyDomain`. 
 Nếu mô hình phát hiện được DGA domain, nó cũng sẽ gửi thêm cảnh báo lên TheHive.
 
+## Cách dùng:
+- Trước hết cần chỉnh sửa giá trị của "SELKS_IP" trong config.py thành IP tương ứng với máy đang chạy SELKS và TheHive
+- Nếu đây là lần đâu chạy, chạy file entrypoint.sh để thêm index "classifyDomain" vào kibana:</br>
+  ./entrypoint
+- Sử dụng
