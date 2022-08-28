@@ -1,41 +1,23 @@
-SELKS on Docker
-===============
+# SELKS, DGA on Docker
+## Mô tả
+Repository này bao gồm việc phân loại "Các thuật toán tạo tên miền" (Domain generation algorithm - DGA) và triển khai SELKS cũng như kết hợp SELKS_DGA.
 
-Intro
------
-
-This version of SELKS is based on docker and intended to provide easier deployment and management.      
-The installation procedure here is valid for any Linux OS that supports docker.
-
-For informations on standard SELKS implementation, see https://github.com/StamusNetworks/SELKS#selks
-
-Minimum Requirements
---------------------
-- 2 cores
-- 8 GB of free RAM
-- 10 GB of free disk space (actual disk occupation will mainly depend of the number of rules and the amount of traffic on the network). 200GB+ SSD grade is recommended.
-- ``git``, ``curl``
-- ``docker`` > 17.06.0 (will be installed during SELKS initial setup)
-- ``docker-compose`` > 1.27.0 (will be installed during SELKS initial setup)
-
-Install process
----------------
-### Basic installation
-
-```bash
-git clone https://github.com/Tuan164/SELKS_DGA.git
-cd SELKS_DGA/SELKS/docker/
-./easy-setup.sh
-docker-compose up -d
+## Cách sử dụng
+Trước hết cần đảm bảo đủ thư viện hỗ trợ
 ```
+pip install -r requirements.txt
+```
+Tùy từng thư mục, ta có các tính năng khác nhau
+- API: Hỗ trợ triển khai hệ thống phân loại DGA domain thông qua API.
+- SELKS_DGA: Trích xuất, phân loại DGA domain từ elasticsearch và gửi trả kết quả cho SELKS và TheHive sau mỗi 15'.
+- SELKS: Cài đặt SELKS, TheHive và các tính năng của SELKS_DGA một cách tự động.
 
-Once the containers are up and running, you should just point your browser to `https://your.selks.IP.here/`
-If you chose to install Portainer during the installation, you must visit `https://your.selks.IP.here:9443` to set portainer's admin password
+***Lưu ý: Đọc kĩ file README.md trong từng thư mục cụ thể để hiểu rõ hơn cách hoạt động cũng như triển khai hệ thống***
 
-### Credentials and log in
-
-In order to access scirius, you will need following credentials:
-
--   user: `selks-user`
--   password: `selks-user`
+## Tài liệu tham khảo
+1. https://github.com/sudo-rushil/dga-intel-web
+2. https://github.com/sudo-rushil/dgaintel
+3. https://www.kaggle.com/datasets/hydrobloquant/dgas-detection
+4. https://github.com/StamusNetworks/SELKS/ 
+5. https://docs.thehive-project.org/thehive/ 
 
