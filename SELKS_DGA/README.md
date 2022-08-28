@@ -20,4 +20,9 @@ Nếu Hệ thống phát hiện được DGA domain, nó cũng sẽ gửi thêm 
 ```
 ./entrypoint
 ```
-- Sử dụng
+- Thực thi câu lệnh bên dưới để tự động thực thi chu trình trích xuất và phân loại sau mỗi 15'
+``` 
+python3 selks_dga.py
+```
+- Vào kibana->discover->index "classifyDomain" và kiểm tra kết quả.
+- Tương tự, vào TheHive để kiểm tra các cảnh báo
