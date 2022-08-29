@@ -46,7 +46,8 @@ def _get_prediction(domain_name, prob=None):
             'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
         }
-        es.indices.create(index="classify_domains", ignore=400)
+        # Con bé này, thêm cái này vô không được cũng không cmt làm ngta mò lỗi mún chết
+        #es.indices.create(index="classify_domains", ignore=400)
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="classify_domains", id=count, document=doc)
         cmd = f'curl -XPOST -H \'Authorization: Bearer dlkOW4xt2XCIUDrinP1B6d5cgb0Vxipv\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
