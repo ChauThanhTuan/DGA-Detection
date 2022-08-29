@@ -29,6 +29,10 @@ docker-compose up -d
     - Url: https://<Your_machine's_IP>
     - Username: selks-user
     - Password: selks-user
+- Portainer:
+    - Url: https://<Your_machine's_IP>:9443
+    - Username: admin
+    - Password: quynhquynh0405        
 - TheHive
     - Url: http://<Your_machine's_IP>:9000
     - Username: admin@thehive.local
