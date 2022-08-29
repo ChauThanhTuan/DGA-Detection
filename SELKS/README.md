@@ -14,8 +14,8 @@ Phần này bao gồm các cài đặt và triển khai tự động mô hình S
 ```
 git clone https://github.com/Tuan164/SELKS_DGA.git
 cd SELKS/docker/containers-data
-mkdir data
-chmod 777 data
+mkdir thehive
+chmod 777 thehive
 cd DGA
 sed -ie 's/172.16.60.10/<Your_machine's_IP>/g' config.py # (change SELKS_IP to your machine's IP)
 chmod +x *
