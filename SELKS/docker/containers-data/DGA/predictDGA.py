@@ -64,7 +64,7 @@ def _get_prediction(domain_name, prob=None):
             'timestamp': datetime.now() + timedelta(hours=7),
     }
     #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
-    res = es.index(index="classifyDomains", id=count, document=doc)
+    res = es.index(index="classify_domains", id=count, document=doc)
     return '{} is genuine with probability {:f}\n'.format(domain_name, prob)
 
 def get_prob(domains, raw=False, internal=False):
