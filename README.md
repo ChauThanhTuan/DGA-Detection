@@ -5,9 +5,10 @@ Repository này bao gồm việc phân loại "Các thuật toán tạo tên mi�
 ## Cách sử dụng
 Trước hết cần đảm bảo đủ công cụ và thư viện hỗ trợ
 ```
-sudo apt install curl
-sudo apt install python3
-sudo apt install pip
+apt install curl
+apt install git
+apt install python3
+apt install pip
 pip install -r requirements.txt
 ```
 Tùy từng thư mục, ta có các tính năng khác nhau
