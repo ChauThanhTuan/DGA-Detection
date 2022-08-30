@@ -7,7 +7,9 @@ def start(url):
     id = responses["hits"]["hits"][0]["_id"]
 
     for response in responses["hits"]["hits"]:
-        domains.append(response["_source"]["dns"]["rrname"])
+        domain = response["_source"]["dns"]["rrname"]
+        if domain not in domains:
+            domains.append(domain)
 
     return (id, domains)
 
@@ -28,7 +30,9 @@ def getDomains(url, id):
         if response["_id"] == id:
             break
 
-        domains.append(response["_source"]["dns"]["rrname"])
+        domain = response["_source"]["dns"]["rrname"]
+        if domain not in domains:
+            domains.append(domain)
 
     id = responses["hits"]["hits"][0]["_id"]
 
