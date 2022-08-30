@@ -48,7 +48,7 @@ def _get_prediction(domain_name, prob=None):
         }
         #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="classify_domains", id=count, document=doc)
-        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer dlkOW4xt2XCIUDrinP1B6d5cgb0Vxipv\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.SELKS_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
+        cmd = cmd = f'curl -XPOST -H \'Authorization: Bearer dlkOW4xt2XCIUDrinP1B6d5cgb0Vxipv\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.THEHIVE_PORT}//api/alert -d \'\x7B  "title": "DGA alert",  "description": "DGA alert",  "type": "external",  "source": "instance"{str(datetime.now())},  "sourceRef": "alert-ref"\x7D\''
         args = shlex.split(cmd)
         process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
