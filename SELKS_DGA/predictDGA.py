@@ -14,7 +14,7 @@ import subprocess
 import config
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
+SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_7_2_1.h5')
 
 MODEL = load_model(SAVED_MODEL_PATH)
 CHAR2IDX = {'-': 0, '.': 1, '0': 2, '1': 3, '2': 4, '3': 5,
