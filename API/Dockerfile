@@ -12,7 +12,7 @@ RUN pip install flask
 RUN pip install flask_restful
 
 RUN mkdir PredictDGA
-COPY trained_model_5_3_2.h5 PredictDGA/trained_model_5_3_2.h5
+COPY trained_model_7_2_1.h5 PredictDGA/trained_model_7_2_1.h5
 COPY API.py PredictDGA/API.py
 COPY predictDGA_API.py PredictDGA/predictDGA_API.py
 
