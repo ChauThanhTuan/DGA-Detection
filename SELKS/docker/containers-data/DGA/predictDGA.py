@@ -14,7 +14,7 @@ import subprocess
 import config
 
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_5_3_2.h5')
+SAVED_MODEL_PATH = os.path.join(DIR_PATH, 'trained_model_7_2_1.h5')
 
 MODEL = load_model(SAVED_MODEL_PATH)
 CHAR2IDX = {'-': 0, '.': 1, '0': 2, '1': 3, '2': 4, '3': 5,
@@ -42,10 +42,11 @@ def _get_prediction(domain_name, prob=None):
     if prob >= 0.5:
         count = count+1
         doc = {
-            'author': 'TuanQuynh',
+            'author': 'QuynhTuan',
             'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
         }
+        #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
         res = es.index(index="classify_domains", id=count, document=doc)
         cmd = f'curl -XPOST -H \'Authorization: Bearer {THEHIVE_KEY}\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.THEHIVE_PORT}/api/alert -d \'\x7B  "title": "DGA alert",  "description": "TheHive predict DGA domain: {domain_name} is DGA with probability {prob}",  "type": "external",  "source": "instance-{str(datetime.now())}",  "sourceRef": "alert-ref"\x7D\''
         args = shlex.split(cmd)
