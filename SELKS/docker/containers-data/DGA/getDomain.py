@@ -1,21 +1,13 @@
 import requests
-import datetime
+# import datetime
+import json
 
-def start(url):
+def getDomains(url):
     domains = []
-    responses = requests.get(url).json()
-    id = responses["hits"]["hits"][0]["_id"]
+    headers = {"Content-Type": "application/json"}
+    data = {"query": {"range": {"@timestamp": {"gte": "now-15m/m", "lt": "now"}}}, "fields": ["_source.dns.rrname"], "_source": "false"}
 
-    for response in responses["hits"]["hits"]:
-        domain = response["_source"]["dns"]["rrname"]
-        if domain not in domains:
-            domains.append(domain)
-
-    return (id, domains)
-
-def getDomains(url, id):
-    domains = []
-    responses = requests.get(url).json()
+    responses = requests.get(url, headers=headers, data=json.dumps(data)).json()
 
     for response in responses["hits"]["hits"]:
         # strTime = response["_source"]["timestamp"].split("T")[1].split(".")[0]
@@ -27,13 +19,9 @@ def getDomains(url, id):
         # print("!!!\n", current_time)
         # print(time_obj)
         # print(datetime.datetime.combine(datetime.datetime.min, time_obj) - datetime.datetime.combine(datetime.datetime.min, current_time))
-        if response["_id"] == id:
-            break
 
         domain = response["_source"]["dns"]["rrname"]
         if domain not in domains:
             domains.append(domain)
 
-    id = responses["hits"]["hits"][0]["_id"]
-
-    return (id, domains)
+    return domains

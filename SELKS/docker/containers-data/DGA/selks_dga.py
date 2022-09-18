@@ -16,7 +16,6 @@ def setInterval(func, sec):
         func()
 
 def main():
-    global id
     current_datetime = datetime.now()  # local date and time
     UTC = pytz.utc
     current_datetime = UTC.localize(current_datetime)
@@ -30,12 +29,8 @@ def main():
     print("Current: ", current_datetime)
     print("=====================================================================================\n")
 
-    if id:
-        url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search?pretty&&size=100'
-        id, domains = getDomains(url, id)
-    else:
-        url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search'
-        id, domains = start(url)
+    url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search?size=10000'
+    domains = getDomains(url)
 
     get_prediction(domains, show=True)
 
