@@ -12,6 +12,7 @@ id = None
 
 def setInterval(func, sec):
     e = threading.Event()
+    func()
     while not e.wait(sec):
         func()
 
