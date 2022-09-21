@@ -1,15 +1,16 @@
 '''
 Main prediction module for dgaintel package
 '''
+import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
-import numpy as np
+
 from tensorflow.keras.models import load_model
 from datetime import datetime, timedelta
 from elasticsearch import Elasticsearch
-import shlex
-import subprocess
+from thehive4py.api import TheHiveApi 
+from thehive4py.models import Alert
 
 import config
 
@@ -41,19 +42,17 @@ def _get_prediction(domain_name, prob=None):
 
     if prob >= 0.5:
         count = count+1
-        doc = {
-            'author': 'QuynhTuan',
-            'text': 'Elasticsearch predict DGA domain: {} is DGA with probability {:f}\n'.format(domain_name, prob),
-            'timestamp': datetime.now() + timedelta(hours=7),
-        }
-        #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
-        res = es.index(index="classify_domains", id=count, document=doc)
-        cmd = f'curl -XPOST -H \'Authorization: Bearer {THEHIVE_KEY}\' -H \'Content-Type: application/json\' http://{config.SELKS_IP}:{config.THEHIVE_PORT}/api/alert -d \'\x7B  "title": "DGA alert",  "description": "TheHive predict DGA domain: {domain_name} is DGA with probability {prob}",  "type": "external",  "source": "instance-{str(datetime.now())}",  "sourceRef": "alert-ref"\x7D\''
-        args = shlex.split(cmd)
-        process = subprocess.Popen(args, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        stdout, stderr = process.communicate()
 
-
+        api = TheHiveApi(f"http://{config.THEHIVE_SERVER}:{config.THEHIVE_PORT}", config.THEHIVE_TOKEN) 
+        alert = Alert(
+            title='Anomal hostname', 
+            description=f"TheHive predict DGA domain: {domain_name} is DGA with probability {prob}", 
+            type='external', 
+            source=f'instance-{str(datetime.now())}', 
+            sourceRef='alert-ref',
+        ) 
+   
+        api.create_alert(alert)
         return '{} is DGA with probability {:f}\n'.format(domain_name, prob)
 
     count = count+1
@@ -62,7 +61,7 @@ def _get_prediction(domain_name, prob=None):
             'text': 'Elasticsearch predict DGA domain: {} is genuine with probability {:f}\n'.format(domain_name, prob),
             'timestamp': datetime.now() + timedelta(hours=7),
     }
-    #res = es.index(index="logstash-predict-dga-domain", id=count+1, document=doc)
+
     res = es.index(index="classify_domains", id=count, document=doc)
     return '{} is genuine with probability {:f}\n'.format(domain_name, prob)
 
