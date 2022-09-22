@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from getDomain import getDomains, start
+from getDomain import getDomains
 from predictDGA import get_prediction
 import config
 
