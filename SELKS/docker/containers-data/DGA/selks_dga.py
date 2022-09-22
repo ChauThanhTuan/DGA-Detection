@@ -30,7 +30,7 @@ def main():
     print("Current: ", current_datetime)
     print("=====================================================================================\n")
 
-    url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search?size=10000'
+    url = f'http://{config.SELKS_IP}:{config.SELKS_PORT}/logstash-dns-{current_date.strftime("%Y.%m.%d")}/_search'
     domains = getDomains(url)
 
     get_prediction(domains, show=True)
