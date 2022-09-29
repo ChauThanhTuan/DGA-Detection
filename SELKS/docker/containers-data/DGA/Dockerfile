@@ -11,6 +11,7 @@ RUN pip install tensorflow
 RUN pip install flask
 RUN pip install flask_restful
 RUN pip install elasticsearch
+RUN pip install thehive4py
 
 RUN mkdir PredictDGA
 COPY trained_model_7_2_1.h5 PredictDGA/trained_model_7_2_1.h5
