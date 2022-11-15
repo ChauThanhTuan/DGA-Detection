@@ -9,7 +9,6 @@ apt install curl
 apt install git
 apt install python3
 apt install pip
-pip install -r requirements.txt
 ```
 Tùy từng thư mục, ta có các tính năng khác nhau
 - API: Hỗ trợ triển khai hệ thống phân loại DGA domain thông qua API.
