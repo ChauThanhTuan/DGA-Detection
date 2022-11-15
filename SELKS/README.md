@@ -13,6 +13,8 @@ Phần này bao gồm các cài đặt và triển khai tự động mô hình S
 ## Cách sử dụng
 ```
 git clone https://github.com/Tuan164/SELKS_DGA.git
+cd SELKS_DGA
+pip install -r requirements.txt
 cd SELKS/docker/containers-data
 mkdir thehive
 chmod 777 thehive
