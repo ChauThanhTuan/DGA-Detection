@@ -213,9 +213,9 @@ services:
       network:
 
   dga:
-    container_name: SELKS_DGA
+    container_name: HCRiffinwDGA
     # build: ./SELKS_DGA
-    image: 1642001/selks_dga
+    image: 1642001/hcriffinwdga
     restart: ${RESTART_MODE:-unless-stopped}
     depends_on:
       - evebox
