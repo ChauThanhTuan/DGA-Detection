@@ -1,6 +1,6 @@
 Công tác phát triển HCriffin branch DGA = SELKS + bundled DGA 
 
-•  Sửa đổi compose name từ SELKS thành HCRiffinwDGA
+•  Sửa đổi compose name từ SELKS thành hcriffinwdga
 sed -i “s|container_name: SELKS_DGA|container_name: HCRiffinwDGA|g” docker-compose.yml
 
 •  Build lại các image docker lên docker hub cá nhân
