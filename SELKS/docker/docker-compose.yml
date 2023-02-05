@@ -140,8 +140,8 @@ services:
       - ./containers-data/scirius/logs/:/logs/
       - suricata-rules:/rules
       - suricata-run:/var/run/suricata
-      - ./containers-data/html/rules:/opt/scirius/rules
-      - ./containers-data/html/accounts:/opt/scirius/accounts
+      - ./containers-data/html/rules:/opt/scirius/rules # For Scirius's home page
+      - ./containers-data/html/accounts:/opt/scirius/accounts # For Scirius's login page
       
     networks:
       network:
